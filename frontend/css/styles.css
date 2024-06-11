@@ -1,0 +1,11 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.section {
+    display: none;
+}
+
+.section.active {
+    display: block;
+}
