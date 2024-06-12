@@ -3,9 +3,8 @@ window.addEventListener('load', async () => {
     const spends = urlParams.get('spends');
     const visits = urlParams.get('visits');
     const noVisitMonths = urlParams.get('noVisitMonths');
-    try {
-        // Get URL parameters
 
+    try {
         // Fetch audience list
         const audienceResponse = await axios.post('http://localhost:5000/api/customers/getList', {
             spends,
@@ -19,8 +18,6 @@ window.addEventListener('load', async () => {
         const campaignsResponse = await axios.get('http://localhost:5000/api/campaigns');
         const campaigns = campaignsResponse.data;
         displayCampaignsList(campaigns);
-
-                // Add event listener to campaign cards for selection
     } catch (error) {
         console.error('Error fetching data:', error.message);
     }
@@ -38,55 +35,61 @@ window.addEventListener('load', async () => {
         }
     });
 
-    const campaignCards = document.querySelectorAll('.card');
-    campaignCards.forEach(card => {
-        card.addEventListener('click', () => {
-            selectCampaign(card);
-        });
+    // Add event listener to the "Send Message" button
+    document.getElementById('send-message').addEventListener('click', async () => {
+        try {
+            const selectedCampaign = document.querySelector('.card.selected');
+            if (!selectedCampaign) {
+                alert('Please select a campaign to send messages');
+                return;
+            }
+
+            const message = selectedCampaign.dataset.message;
+
+            const audienceResponse = await axios.post('http://localhost:5000/api/customers/getList', {
+                spends,
+                visits,
+                noVisitMonths
+            });
+            const audienceList = audienceResponse.data;
+
+            for (const customer of audienceList) {
+                await axios.post('http://localhost:5000/api/communication-log', {
+                    customer: customer._id,
+                    message: message,
+                    batchSize: audienceList.length
+                });
+            }
+            alert('Messages have been sent successfully!');
+        } catch (error) {
+            console.error('Error sending messages:', error.message);
+        }
     });
 
-        // Add event listener to the "Send Message" button
-        document.getElementById('send-message').addEventListener('click', async () => {
-            try {
-                const selectedCampaign = document.querySelector('.card.selected');
-                if (!selectedCampaign) {
-                    alert('Please select a campaign to send messages');
-                    return;
-                }
-
-                const message = selectedCampaign.dataset.message;
-                console.log(message)
-                const audienceResponse = await axios.post('http://localhost:5000/api/customers/getList', {
-                    spends,
-                    visits,
-                    noVisitMonths
-                });
-                const audienceList = audienceResponse.data;
-
-                console.log("audienceList", audienceList);
-    
-                for (const customer of audienceList) {
-                    const response  = await axios.post('http://localhost:5000/api/communication-log', {
-                        customer: customer._id,
-                        message: message
-                    });
-                }
-                alert('Messages have been sent successfully!');
-            } catch (error) {
-                console.error('Error sending messages:', error.message);
-            }
-        });
+    // Add event listener for dynamically created campaign cards
+    document.getElementById('campaign-list').addEventListener('click', (event) => {
+        if (event.target.closest('.card')) {
+            selectCampaign(event.target.closest('.card'));
+        }
+    });
 });
 
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const year = date.getFullYear();
 
+    return `${day}/${month}/${year}`;
+}
 
 function displayAudienceList(audienceList) {
     const audienceListElement = document.getElementById('audience-list');
     audienceListElement.innerHTML = audienceList.map(audience => `
         <div class="card mb-2">
             <div class="card-body">
-                <h5 class="card-title">Customer: ${audience.name}</h5>
-                <p class="card-text">Spends: ${audience.totalSpends}, Visits: ${audience.visits}</p>
+                <h5 class="card-title">${audience.name}</h5>
+                <p class="card-text">Spends: ${audience.totalSpends}, Visits: ${audience.visits}, Last Visit: ${formatDate(audience.lastVisitDate)}</p>
             </div>
         </div>
     `).join('');

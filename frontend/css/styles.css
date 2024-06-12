@@ -1,6 +1,8 @@
+/* Base Styles */
 body {
     background-color: #f4f4f9;
     color: #333;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .navbar {
@@ -15,57 +17,47 @@ body {
     color: #ccc !important;
 }
 
-header {
+/* Header */
+.header-section {
     background: #333;
     color: #fff;
-    padding: 60px 0;
-    border-bottom: 2px solid #444;
+    padding: 100px 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
 }
 
-h1 {
-    font-size: 2.5rem;
-    margin-bottom: 20px;
+.header-section::after {
+    content: '';
+    background: rgba(0, 0, 0, 0.6);
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
 }
 
-.lead {
-    font-size: 1.25rem;
-    color: #ddd;
-}
-
+/* Main Content */
 .section {
     background: #fff;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.form-group {
     margin-bottom: 20px;
 }
 
-.card {
-    border: 1px solid #333;
+.form-control {
     border-radius: 5px;
-    cursor: pointer;
-    transition: transform 0.2s;
+    padding: 10px;
 }
 
-.card:hover {
-    transform: scale(1.02);
-}
-
-.card-body {
-    background: #f8f9fa;
-}
-
-.card-title {
-    color: #333;
-}
-
-.card-text {
-    color: #555;
-}
-
-.card.selected {
-    border: 2px solid #28a745;
-    background: #e3fcef;
+.btn {
+    border-radius: 5px;
+    padding: 10px 20px;
 }
 
 .btn-dark {
@@ -104,10 +96,44 @@ h1 {
     border-color: #1e7e34;
 }
 
-footer {
+/* Cards */
+.card {
+    border: 1px solid #333;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.card-body {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.card-title {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.card-text {
+    color: #555;
+}
+
+.card.selected {
+    border: 2px solid #28a745;
+    background: #e3fcef;
+}
+
+/* Footer */
+.footer-section {
     background-color: #212529;
     color: #fff;
     padding: 20px 0;
+    text-align: center;
 }
 
 footer p {
