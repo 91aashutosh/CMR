@@ -14,19 +14,16 @@ const dotenv = require('dotenv').config();
 
 const app = express();
 
-// Body parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
 
-// DB Config
 mongoose.connect(process.env.mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 // Passport middleware
 // app.use(passport.initialize());
 // require('./config/passport');
 
-// Routes
 app.use('/api/customers', customerRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/communication-log', CommunicationLogRoutes);

@@ -3,7 +3,6 @@
   const Customer = require('../models/Customer');
   const Order = require('../models/Order');
 
-  // Create a new customer
   router.post('/', async (req, res) => {
     try {
       const newCustomer = new Customer(req.body);
@@ -14,7 +13,6 @@
     }
   });
 
-  // Get customers with filters
   router.post('/getList', async (req, res) => {
     const { spends, visits, noVisitMonths } = req.body;
     const query = {};

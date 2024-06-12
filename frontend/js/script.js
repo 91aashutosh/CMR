@@ -73,7 +73,7 @@ document.getElementById('audience-form').addEventListener('submit', async (event
     const noVisitMonths = document.getElementById('noVisitMonths').value;
 
     try {
-        const response = await axios.post('http://localhost:5000/api/audience/check', {
+        const response = await axios.post('https://cmr-cadt.onrender.com/api/audience/check', {
             spends,
             visits,
             noVisitMonths

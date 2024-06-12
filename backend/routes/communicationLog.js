@@ -15,7 +15,7 @@ router.post('/', async (req, res) => {
     try {
       const newLog = new CommunicationLog({ customer, message });
       const savedLog = await newLog.save();
-      const statusResponse = await axios.post('http://localhost:5000/api/communication-log/delivery', { logId: savedLog._id });
+      const statusResponse = await axios.post('https://cmr-cadt.onrender.com/api/communication-log/delivery', { logId: savedLog._id });
       savedLog.status = statusResponse.data.status;
       await savedLog.save();
   
@@ -33,9 +33,6 @@ router.post('/', async (req, res) => {
     return array;
   }
   
-  // Predefined batch size and success ra
-  
-  // Initialize and shuffle the status batch
   function initializeStatusBatch() {
     statusBatch = Array(BATCH_SIZE)
       .fill('SENT', 0, Math.floor(BATCH_SIZE * SUCCESS_RATE))
@@ -43,7 +40,6 @@ router.post('/', async (req, res) => {
     shuffle(statusBatch);
   }
   
-  // Get vendor status from the batch
   function getVendorStatus() {
     if (statusBatch.length === 0) {
       initializeStatusBatch();
@@ -51,10 +47,8 @@ router.post('/', async (req, res) => {
     return statusBatch.pop();
   }
   
-  // Initialize the status batch on server start
   initializeStatusBatch();
   
-  // Define the delivery endpoint
   router.post('/delivery', (req, res) => {
     const status = getVendorStatus();
     res.json({ status });

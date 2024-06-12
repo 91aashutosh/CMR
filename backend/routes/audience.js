@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Customer = require('../models/Customer');
 
-// Get audience size with filters
 router.post('/check', async (req, res) => {
   const { spends, visits, noVisitMonths } = req.body;
   console.log(spends, visits, noVisitMonths)
