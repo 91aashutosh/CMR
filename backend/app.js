@@ -10,6 +10,7 @@ const audienceRoutes = require('./routes/audience');
 const campaignRoutes = require('./routes/campaigns');
 const CommunicationLogRoutes = require('./routes/communicationLog')
 const cors = require('cors');
+const dotenv = require('dotenv').config();
 
 const app = express();
 
@@ -19,7 +20,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // DB Config
-mongoose.connect(keys.mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 // Passport middleware
 // app.use(passport.initialize());

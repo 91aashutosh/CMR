@@ -1,16 +1,35 @@
-/* styles.css */
-
 body {
-    background-color: #f8f9fa;
+    background-color: #f4f4f9;
+    color: #333;
 }
 
-.container {
-    padding-top: 20px;
+.navbar {
+    background-color: #212529;
 }
 
-h2, h3 {
+.navbar-brand, .nav-link {
+    color: #fff !important;
+}
+
+.nav-link:hover {
+    color: #ccc !important;
+}
+
+header {
+    background: #333;
+    color: #fff;
+    padding: 60px 0;
+    border-bottom: 2px solid #444;
+}
+
+h1 {
+    font-size: 2.5rem;
     margin-bottom: 20px;
-    color: #007bff;
+}
+
+.lead {
+    font-size: 1.25rem;
+    color: #ddd;
 }
 
 .section {
@@ -22,22 +41,26 @@ h2, h3 {
 }
 
 .card {
-    border: 1px solid #007bff;
-    margin-bottom: 20px;
+    border: 1px solid #333;
     border-radius: 5px;
     cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: scale(1.02);
 }
 
 .card-body {
-    background: #e9f5ff;
+    background: #f8f9fa;
 }
 
 .card-title {
-    color: #007bff;
+    color: #333;
 }
 
 .card-text {
-    color: #333;
+    color: #555;
 }
 
 .card.selected {
@@ -45,12 +68,48 @@ h2, h3 {
     background: #e3fcef;
 }
 
-.btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
+.btn-dark {
+    background-color: #333;
+    border-color: #333;
+    color: #fff;
+    transition: background-color 0.2s, border-color 0.2s;
 }
 
-.btn-primary:hover {
-    background-color: #0056b3;
-    border-color: #0056b3;
+.btn-dark:hover {
+    background-color: #444;
+    border-color: #444;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    color: #fff;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+    color: #fff;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+footer {
+    background-color: #212529;
+    color: #fff;
+    padding: 20px 0;
+}
+
+footer p {
+    margin: 0;
 }

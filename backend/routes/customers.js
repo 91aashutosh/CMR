@@ -35,6 +35,10 @@
     }
 
     try {
+      if(!spends && !visits && !noVisitMonths)
+        {
+          return res.json([]);  
+        }  
       const customers = await Customer.find(query);
       console.log("customers", customers);
       res.json(customers);
