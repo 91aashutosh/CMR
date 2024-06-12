@@ -10,14 +10,14 @@ function showSection(sectionId) {
 }
 
 // Listen for hash changes
-window.addEventListener('hashchange', () => {
-    const hash = window.location.hash.substring(1); // Remove the leading #
-    if (hash) {
-        showSection(hash);
-    } else {
-        showSection('create-audience');
-    }
-});
+// window.addEventListener('hashchange', () => {
+//     let hash = window.location.hash.substring(1); // Remove the leading #
+//     if (hash) {
+//         showSection(hash);
+//     } else {
+//         showSection('create-audience');
+//     }
+// });
 
 // Show the appropriate section based on the current hash on page load
 document.addEventListener('DOMContentLoaded', () => {
@@ -33,48 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
         fetchCampaigns();
     }
 });
-
-// Handle form submission to create audience
-document.getElementById('audience-form').addEventListener('submit', async (event) => {
-    event.preventDefault();
-
-    const spends = document.getElementById('spends').value;
-    const visits = document.getElementById('visits').value;
-    const noVisitMonths = document.getElementById('noVisitMonths').value;
-
-    try {
-        const response = await axios.get('/api/customers/', {
-            params: { spends, visits, noVisitMonths }
-        });
-        const data = response.data;
-        document.getElementById('audience-result').innerHTML = `
-            <h3>Audience Created</h3>
-            <pre>${JSON.stringify(data, null, 2)}</pre>
-        `;
-
-        // Get audience size after creating
-        getAudienceSize();
-    } catch (error) {
-        document.getElementById('audience-result').innerHTML = `<p>Error: ${error.message}</p>`;
-    }
-});
-
-// Get audience size after creating
-async function getAudienceSize() {
-    try {
-        const response = await axios.post('/api/audience/check', {
-            conditions: [
-                { field: 'spends', value: document.getElementById('spends').value },
-                { field: 'visits', value: document.getElementById('visits').value },
-                { field: 'noVisitMonths', value: document.getElementById('noVisitMonths').value }
-            ]
-        });
-        const audienceSize = response.data.audienceSize;
-        console.log('Audience Size:', audienceSize);
-    } catch (error) {
-        console.error('Error fetching audience size:', error.message);
-    }
-}
 
 // Fetch campaigns and display them
 async function fetchCampaigns() {
@@ -93,8 +51,77 @@ async function fetchCampaigns() {
 // Ensure campaigns are fetched when navigating to the Campaigns section
 window.addEventListener('hashchange', () => {
     console.log('Hash changed:', window.location.hash);
+    let hash = window.location.hash.substring(1);
+    if (window.location.hash === '#/campaigns') {
+        fetchCampaigns();
+    } else if (window.location.hash === '#/create-audience') {
+        showSection('create-audience');
+    } else if (window.location.hash === '#/') {
+        // Add logic to handle default section (if needed)
+        showSection('create-audience');
+    }
+});
+
+
+
+// Function to handle form submission for creating audience
+document.getElementById('audience-form').addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const spends = document.getElementById('spends').value;
+    const visits = document.getElementById('visits').value;
+    const noVisitMonths = document.getElementById('noVisitMonths').value;
+
+    try {
+        const response = await axios.post('http://localhost:5000/api/audience/check', {
+            spends,
+            visits,
+            noVisitMonths
+        });
+        const audienceSize = response.data.audienceSize;
+        document.getElementById('audience-result').innerHTML = `
+            <h3>Audience Size: ${audienceSize}</h3>
+        `;
+    } catch (error) {
+        document.getElementById('audience-result').innerHTML = `<p>Error: ${error.message}</p>`;
+    }
+});
+
+// Function to fetch campaigns when the Campaigns section is shown
+window.addEventListener('hashchange', () => {
     if (window.location.hash === '#/campaigns') {
         fetchCampaigns();
     }
 });
+
+// document.addEventListener('DOMContentLoaded', () => {
+//     // Add event listener to the "Save and Continue" button
+    document.getElementById('save-continue').addEventListener('click', async () => {
+        try {
+
+                    const spends = document.getElementById('spends').value;
+                    const visits = document.getElementById('visits').value;
+                    const noVisitMonths = document.getElementById('noVisitMonths').value;
+                    console.log(spends, visits, noVisitMonths);
+        const queryParams = `spends=${spends}&visits=${visits}&noVisitMonths=${noVisitMonths}`;
+        window.location.href = `dashboard.html?${queryParams}`;
+        } catch (error) {
+            console.error('Error creating audience:', error.message);
+        }
+    });
+// })
+
+// Function to fetch campaigns
+async function fetchCampaigns() {
+    try {
+        const response = await axios.get('/api/campaigns');
+        const campaigns = response.data;
+        console.log('Campaigns:', campaigns);
+        // Update the UI with the fetched campaigns
+    } catch (error) {
+        console.error('Error fetching campaigns:', error.message);
+    }
+}
+
+
 

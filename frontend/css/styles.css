@@ -1,11 +1,56 @@
+/* styles.css */
+
 body {
-    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+}
+
+.container {
+    padding-top: 20px;
+}
+
+h2, h3 {
+    margin-bottom: 20px;
+    color: #007bff;
 }
 
 .section {
-    display: none;
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
 }
 
-.section.active {
-    display: block;
+.card {
+    border: 1px solid #007bff;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.card-body {
+    background: #e9f5ff;
+}
+
+.card-title {
+    color: #007bff;
+}
+
+.card-text {
+    color: #333;
+}
+
+.card.selected {
+    border: 2px solid #28a745;
+    background: #e3fcef;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
 }

@@ -8,12 +8,15 @@ const orderRoutes = require('./routes/orders');
 const authRoutes = require('./routes/auth');
 const audienceRoutes = require('./routes/audience');
 const campaignRoutes = require('./routes/campaigns');
+const CommunicationLogRoutes = require('./routes/communicationLog')
+const cors = require('cors');
 
 const app = express();
 
 // Body parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(cors());
 
 // DB Config
 mongoose.connect(keys.mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -25,6 +28,7 @@ mongoose.connect(keys.mongoURI, { useNewUrlParser: true, useUnifiedTopology: tru
 // Routes
 app.use('/api/customers', customerRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/communication-log', CommunicationLogRoutes);
 // app.use('/auth', authRoutes);
 app.use('/api/audience', audienceRoutes);
 app.use('/api/campaigns', campaignRoutes);
