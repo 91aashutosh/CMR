@@ -112,7 +112,6 @@ function displayCampaign(campaign) {
         <div class="card mb-2" data-message="${campaign.message}">
             <div class="card-body">
                 <h5 class="card-title">${campaign.message}</h5>
-                <p class="card-text">Created: ${new Date(campaign.createdAt).toLocaleDateString()}</p>
             </div>
         </div>
     `;
