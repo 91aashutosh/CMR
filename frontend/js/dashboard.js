@@ -89,7 +89,7 @@ function displayAudienceList(audienceList) {
         <div class="card mb-2">
             <div class="card-body">
                 <h5 class="card-title">${audience.name}</h5>
-                <p class="card-text">Spends: ${audience.totalSpends}, Visits: ${audience.visits}, Last Visit: ${formatDate(audience.lastVisitDate)}</p>
+                <p class="card-text">Spends: ${audience.totalSpends}, Visits: ${audience.visits}</p>
             </div>
         </div>
     `).join('');
@@ -101,7 +101,6 @@ function displayCampaignsList(campaigns) {
         <div class="card mb-2" data-message="${campaign.message}">
             <div class="card-body">
                 <h5 class="card-title">${campaign.message}</h5>
-                <p class="card-text">Created: ${new Date(campaign.createdAt).toLocaleDateString()}</p>
             </div>
         </div>
     `).join('');
