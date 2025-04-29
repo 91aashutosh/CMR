@@ -34,7 +34,6 @@ router.post('/', async (req, res) => {
 router.get('/', async (req, res) => {
   try {
     const campaigns = await Campaign.find()
-      .populate('segmentId')
       .sort({ createdAt: -1 });
     res.json(campaigns);
   } catch (err) {
