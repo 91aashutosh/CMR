@@ -56,10 +56,20 @@ router.get('/customers/:segmentId', async (req, res) => {
 
     const { minSpends, minVisits, noVisitMonths } = segment.filter_conditions;
 
-    const query = {
-      visits: { $gte: minVisits },
-      totalSpends: { $gte: minSpends },
-      noVisitMonths: { $gte: noVisitMonths }
+    const query = {};
+
+    if (minSpends) {
+      query.totalSpends = { $gte: minSpends };
+    }
+
+    if (minVisits) {
+      query.visits = { $gte: minVisits };
+    }
+
+    if (noVisitMonths) {
+      const date = new Date();
+      date.setMonth(date.getMonth() - noVisitMonths);
+      query.lastVisitDate = { $lte: date };
     }
 
     const customers = await Customer.find(query);
@@ -78,10 +88,20 @@ router.get('/customersCount/:segmentId', async (req, res) => {
 
     const { minSpends, minVisits, noVisitMonths } = segment.filter_conditions;
 
-    const query = {
-      visits: { $gte: minVisits },
-      totalSpends: { $gte: minSpends },
-      noVisitMonths: { $gte: noVisitMonths }
+    const query = {};
+
+    if (minSpends) {
+      query.totalSpends = { $gte: minSpends };
+    }
+
+    if (minVisits) {
+      query.visits = { $gte: minVisits };
+    }
+
+    if (noVisitMonths) {
+      const date = new Date();
+      date.setMonth(date.getMonth() - noVisitMonths);
+      query.lastVisitDate = { $lte: date };
     }
 
     const customers = await Customer.countDocuments(query);
