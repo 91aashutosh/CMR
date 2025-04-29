@@ -38,7 +38,6 @@ const router = express.Router();
           return res.json([]);  
         }  
       const customers = await Customer.find(query);
-      console.log("customers", customers);
       res.json(customers);
     } catch (err) {
       res.status(400).json({ error: err.message });

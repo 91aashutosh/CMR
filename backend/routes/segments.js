@@ -53,9 +53,16 @@ router.get('/customers/:segmentId', async (req, res) => {
     if (!segment) {
       return res.status(404).json({ error: 'Segment not found' });
     }
-    const customers = await Customer.find({
-      ...segment.filter_conditions
-    });
+
+    const { minSpends, minVisits, noVisitMonths } = segment.filter_conditions;
+
+    const query = {
+      visits: { $gte: minVisits },
+      totalSpends: { $gte: minSpends },
+      noVisitMonths: { $gte: noVisitMonths }
+    }
+
+    const customers = await Customer.find(query);
     res.json(customers);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -68,9 +75,16 @@ router.get('/customersCount/:segmentId', async (req, res) => {
     if (!segment) {
       return res.status(404).json({ error: 'Segment not found' });
     }
-    const customers = await Customer.countDocuments({
-      ...segment.filter_conditions
-    });
+
+    const { minSpends, minVisits, noVisitMonths } = segment.filter_conditions;
+
+    const query = {
+      visits: { $gte: minVisits },
+      totalSpends: { $gte: minSpends },
+      noVisitMonths: { $gte: noVisitMonths }
+    }
+
+    const customers = await Customer.countDocuments(query);
     res.json({ count: customers });
   } catch (err) {
     res.status(400).json({ error: err.message });
