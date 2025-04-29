@@ -9,6 +9,7 @@ const authRoutes = require('./routes/auth');
 const audienceRoutes = require('./routes/audience');
 const campaignRoutes = require('./routes/campaigns');
 const CommunicationLogRoutes = require('./routes/communicationLog')
+const segmentRoutes = require('./routes/segments');
 const cors = require('cors');
 const dotenv = require('dotenv').config();
 
@@ -18,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
 
-mongoose.connect(process.env.mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect("mongodb+srv://aashu2348154:Aashu123@cluster0.uanyjgk.mongodb.net/CMR?retryWrites=true&w=majority&appName=Cluster0", { useNewUrlParser: true, useUnifiedTopology: true });
 
 // Passport middleware
 // app.use(passport.initialize());
@@ -30,5 +31,6 @@ app.use('/api/communication-log', CommunicationLogRoutes);
 // app.use('/auth', authRoutes);
 app.use('/api/audience', audienceRoutes);
 app.use('/api/campaigns', campaignRoutes);
+app.use('/api/segments', segmentRoutes);
 
 module.exports = app;

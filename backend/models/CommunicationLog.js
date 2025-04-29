@@ -2,13 +2,14 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const CommunicationLogSchema = new Schema({
-  customer: {
+  customerId: {
     type: Schema.Types.ObjectId,
     ref: 'Customer',
     required: true,
   },
-  message: {
-    type: String,
+  campaignId: {
+    type: Schema.Types.ObjectId,
+    ref: 'Campaign',
     required: true,
   },
   status: {

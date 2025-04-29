@@ -10,6 +10,10 @@ const CustomerSchema = new Schema({
     type: String,
     required: true,
   },
+  phone: {
+    type: String,
+    required: true,
+  },
   visits: {
     type: Number,
     default: 0,

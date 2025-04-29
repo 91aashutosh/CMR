@@ -1,28 +1,56 @@
 const express = require('express');
 const router = express.Router();
-const CommunicationLog = require('../models/CommunicationLog');
 const Campaign = require('../models/campaigns');
 
-
+// Create new campaign
 router.post('/', async (req, res) => {
-  const { message } = req.body;
+  const {
+    name,
+    heading,
+    message,
+    forceSend,
+    scheduledTime,
+    segmentId
+  } = req.body;
+
   try {
-    const newCamp = new Campaign({
-      message
-    })
+    const newCampaign = new Campaign({
+      name,
+      heading,
+      message,
+      forceSend,
+      scheduledTime,
+      segmentId
+    });
 
-    const data = await newCamp.save();
-
-    res.json(data);
+    const campaign = await newCampaign.save();
+    res.json(campaign);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 });
 
+// Get all campaigns
 router.get('/', async (req, res) => {
   try {
-    const campaigns = await Campaign.find().sort({ createdAt: -1 });
+    const campaigns = await Campaign.find()
+      .populate('segmentId')
+      .sort({ createdAt: -1 });
     res.json(campaigns);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// Get campaign by ID
+router.get('/:id', async (req, res) => {
+  try {
+    const campaign = await Campaign.findById(req.params.id)
+      .populate('segmentId');
+    if (!campaign) {
+      return res.status(404).json({ error: 'Campaign not found' });
+    }
+    res.json(campaign);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
