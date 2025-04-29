@@ -3,85 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Campaign Manager</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Marketing Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .header-section {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 80px 0;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .main-content {
+            padding-bottom: 40px;
+        }
+    </style>
 </head>
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="#/">Campaign Manager</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <a class="navbar-brand" href="#">Marketing Dashboard</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="#/create-audience">Create Audience</a>
+                        <a class="nav-link active" href="#">Segments</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#/campaigns">Campaigns</a>
+                        <a class="nav-link" href="campaigns.html">Campaigns</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Analytics</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Header -->
+    <!-- Header Section -->
     <header class="header-section">
-        <div class="container text-center text-white">
-            <h1 class="display-4">Customer-Managed Relationship</h1>
-            <p class="lead">Manage your audiences and campaigns effectively</p>
+        <div class="container text-center header-content">
+            <h1 class="display-4 fw-bold mb-3">Customer Segmentation</h1>
+            <p class="lead mb-4">Create targeted customer segments to personalize your marketing campaigns</p>
+            <a href="#segment-content" class="btn btn-light btn-lg">
+                <i class="bi bi-arrow-down"></i> Get Started
+            </a>
         </div>
     </header>
 
     <!-- Main Content -->
-    <main class="container my-5">
-        <!-- Create Audience Section -->
-        <section id="create-audience" class="section">
-            <h2>Create Audience</h2>
-            <form id="audience-form">
-                <div class="form-group">
-                    <label for="spends" class="form-label">Minimum Spends</label>
-                    <input type="number" class="form-control" id="spends">
+    <div class="container main-content" id="segment-content">
+        <div class="row">
+            <div class="col-md-8">
+                <!-- Segment Creation Form -->
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h4><i class="bi bi-plus-circle"></i> Create New Segment</h4>
+                    </div>
+                    <div class="card-body">
+                        <form id="segment-form">
+                            <div class="mb-3">
+                                <label for="segment-name" class="form-label">Segment Name</label>
+                                <input type="text" class="form-control" id="segment-name" placeholder="e.g. High-Value Customers" required>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label for="min-spends" class="form-label">Min Spends ($)</label>
+                                    <input type="number" class="form-control" id="min-spends" placeholder="0">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="min-visits" class="form-label">Min Visits</label>
+                                    <input type="number" class="form-control" id="min-visits" placeholder="0">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="inactive-months" class="form-label">Inactive Months</label>
+                                    <input type="number" class="form-control" id="inactive-months" placeholder="0">
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between mt-4">
+                                <button type="submit" class="btn btn-primary px-4">
+                                    <i class="bi bi-save"></i> Create Segment
+                                </button>
+                                <button type="button" id="ai-recommend" class="btn btn-success px-4">
+                                    <i class="bi bi-magic"></i> AI Recommendations
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="visits" class="form-label">Minimum Visits</label>
-                    <input type="number" class="form-control" id="visits">
-                </div>
-                <div class="form-group">
-                    <label for="noVisitMonths" class="form-label">Not Visited from (in Months)</label>
-                    <input type="number" class="form-control" id="noVisitMonths">
-                </div>
-                <div class="d-flex justify-content-between mt-3">
-                    <button type="submit" class="btn btn-dark">Create Audience</button>
-                    <button id="save-continue" class="btn btn-secondary">Save and Continue</button>
-                </div>
-            </form>
-            <div id="audience-result" class="mt-3"></div>
-        </section>
 
-        <!-- Campaigns Section -->
-        <section id="campaigns" class="section d-none">
-            <h2>Past Campaigns</h2>
-            <ul id="campaign-list" class="list-group">
-                <!-- Campaigns will be loaded here dynamically -->
-            </ul>
-        </section>
-    </main>
+                <!-- AI Recommendations Panel (Initially Hidden) -->
+                <div id="ai-panel" class="card mb-4 shadow-sm d-none">
+                    <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0"><i class="bi bi-robot"></i> AI Recommendations</h4>
+                        <button type="button" class="btn-close btn-close-white" id="close-ai-panel"></button>
+                    </div>
+                    <div class="card-body">
+                        <div id="ai-results" class="p-2"></div>
+                    </div>
+                </div>
+            </div>
 
-    <!-- Footer -->
-    <footer class="footer-section">
-        <div class="container text-center text-white py-3">
-            <p>&copy; 2024 Campaign Manager. All rights reserved.</p>
+            <div class="col-md-4">
+                <!-- Segment List -->
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0"><i class="bi bi-collection"></i> Existing Segments</h4>
+                        <span class="badge bg-light text-primary" id="segment-count">0</span>
+                    </div>
+                    <div class="card-body p-0">
+                        <div id="segment-list" class="list-group list-group-flush">
+                            <div class="list-group-item text-center py-4 text-muted" id="empty-segment-message">
+                                <i class="bi bi-info-circle fs-1"></i>
+                                <p class="mt-2">No segments created yet</p>
+                            </div>
+                            <!-- Segments will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+        <!-- Segment Details Modal -->
+        <div class="modal fade" id="segmentModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title">Segment Details</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="segment-details"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" id="use-segment" class="btn btn-primary">
+                            <i class="bi bi-send"></i> Use for Campaign
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="js/script.js"></script>
+    <script src="js/ai-service.js"></script>
 </body>
 </html>

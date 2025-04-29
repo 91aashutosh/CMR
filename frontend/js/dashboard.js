@@ -6,7 +6,7 @@ window.addEventListener('load', async () => {
 
     try {
         // Fetch audience list
-        const audienceResponse = await axios.post('https://cmr-cadt.onrender.com/api/customers/getList', {
+        const audienceResponse = await axios.post('https://cmr-1-p1qb.onrender.com/api/customers/getList', {
             spends,
             visits,
             noVisitMonths
@@ -15,7 +15,7 @@ window.addEventListener('load', async () => {
         displayAudienceList(audienceList);
 
         // Fetch campaigns list
-        const campaignsResponse = await axios.get('https://cmr-cadt.onrender.com/api/campaigns');
+        const campaignsResponse = await axios.get('https://cmr-1-p1qb.onrender.com/api/campaigns');
         const campaigns = campaignsResponse.data;
         displayCampaignsList(campaigns);
     } catch (error) {
@@ -27,7 +27,7 @@ window.addEventListener('load', async () => {
         event.preventDefault();
         const message = document.getElementById('message').value;
         try {
-            const response = await axios.post('https://cmr-cadt.onrender.com/api/campaigns/', { message });
+            const response = await axios.post('https://cmr-1-p1qb.onrender.com/api/campaigns/', { message });
             displayCampaign(response.data);
             document.getElementById('message').value = '';
         } catch (error) {
@@ -46,7 +46,7 @@ window.addEventListener('load', async () => {
 
             const message = selectedCampaign.dataset.message;
 
-            const audienceResponse = await axios.post('https://cmr-cadt.onrender.com/api/customers/getList', {
+            const audienceResponse = await axios.post('https://cmr-1-p1qb.onrender.com/api/customers/getList', {
                 spends,
                 visits,
                 noVisitMonths
@@ -54,7 +54,7 @@ window.addEventListener('load', async () => {
             const audienceList = audienceResponse.data;
 
             for (const customer of audienceList) {
-                await axios.post('https://cmr-cadt.onrender.com/api/communication-log', {
+                await axios.post('https://cmr-1-p1qb.onrender.com/api/communication-log', {
                     customer: customer._id,
                     message: message,
                     batchSize: audienceList.length
