@@ -34,6 +34,7 @@ router.post('/', async (req, res) => {
 router.get('/', async (req, res) => {
   try {
     const campaigns = await Campaign.find()
+      .populate('segmentId')
       .sort({ createdAt: -1 });
     res.json(campaigns);
   } catch (err) {
@@ -45,7 +46,6 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const campaign = await Campaign.findById(req.params.id)
-      .populate('segmentId');
     if (!campaign) {
       return res.status(404).json({ error: 'Campaign not found' });
     }
