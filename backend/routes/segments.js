@@ -1,9 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const Campaign = require('../models/campaigns');
 const Segment = require('../models/segments');
 const Customer = require('../models/Customer');
-const amqp = require('amqplib/callback_api');
 
 // Create new segment
 router.post('/', async (req, res) => {
