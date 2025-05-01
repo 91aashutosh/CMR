@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <tr data-id="${campaign._id}">
                 <td>
                     <strong>${campaign.name}</strong>
-                    <div class="text-muted small">${campaign.subject || 'No subject'}</div>
+                    <div class="text-muted small">${campaign.heading || 'No subject'}</div>
                 </td>
                 <td>
                     <span class="badge ${getStatusBadgeClass(campaign.status)}">
@@ -121,61 +121,57 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Render campaign statistics chart
-    function renderCampaignStats(campaigns) {
-        const ctx = document.getElementById('campaign-stats-chart');
-        if (!ctx) return;
-        
-        // Filter to only completed campaigns
-        const completedCampaigns = campaigns.filter(c => c.status === 'Sent');
-        
-        // Destroy previous chart if exists
-        if (campaignChart) {
-            campaignChart.destroy();
-        }
-        
-        if (completedCampaigns.length === 0) {
-            ctx.closest('.card-body').innerHTML = `
-                <div class="text-center py-4 text-muted">
-                    <i class="bi bi-bar-chart-line fs-1"></i>
-                    <p class="mt-2">No campaign data available yet</p>
-                </div>
-            `;
-            return;
-        }
-        
-        campaignChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: completedCampaigns.map(c => c.name),
-                datasets: [
-                    {
-                        label: 'Open Rate %',
-                        data: completedCampaigns.map(c => c.openRate || 0),
-                        backgroundColor: 'rgba(78, 115, 223, 0.6)',
-                        borderColor: 'rgba(78, 115, 223, 1)',
-                        borderWidth: 1
-                    },
-                    {
-                        label: 'Click Rate %',
-                        data: completedCampaigns.map(c => c.clickRate || 0),
-                        backgroundColor: 'rgba(28, 200, 138, 0.6)',
-                        borderColor: 'rgba(28, 200, 138, 1)',
-                        borderWidth: 1
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 100
-                    }
+// Add this function to campaigns.js
+function renderCampaignStats(campaigns) {
+    const ctx = document.getElementById('campaign-stats-chart');
+    if (!ctx) return;
+
+    // Dummy data for the chart
+    const dummyCampaigns = [
+        { name: "Summer Sale", openRate: 65, clickRate: 25 },
+        { name: "Winter Collection", openRate: 72, clickRate: 32 },
+        { name: "New Arrivals", openRate: 58, clickRate: 18 },
+        { name: "Clearance Event", openRate: 81, clickRate: 42 }
+    ];
+
+    // Destroy previous chart if exists
+    if (window.campaignChart) {
+        window.campaignChart.destroy();
+    }
+
+    window.campaignChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: dummyCampaigns.map(c => c.name),
+            datasets: [
+                {
+                    label: 'Open Rate %',
+                    data: dummyCampaigns.map(c => c.openRate),
+                    backgroundColor: 'rgba(78, 115, 223, 0.6)',
+                    borderColor: 'rgba(78, 115, 223, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Click Rate %',
+                    data: dummyCampaigns.map(c => c.clickRate),
+                    backgroundColor: 'rgba(28, 200, 138, 0.6)',
+                    borderColor: 'rgba(28, 200, 138, 1)',
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100
                 }
             }
-        });
-    }
+        }
+    });
+}
+
     
     // Render recent activity
     function renderRecentActivity(campaigns) {
@@ -338,12 +334,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 const formData = {
                     name: document.getElementById('campaign-name').value,
                     segmentId: document.getElementById('campaign-segment').value,
-                    subject: document.getElementById('campaign-subject').value,
+                    heading: document.getElementById('campaign-subject').value,
                     message: document.getElementById('campaign-message').value,
-                    schedule: document.getElementById('campaign-schedule').value,
-                    scheduledTime: document.getElementById('campaign-schedule').value === 'scheduled' 
-                        ? document.getElementById('campaign-date').value 
-                        : null
+                    forceSend: true,
+                    scheduledTime: new Date()
                 };
                 
                 campaignSpinner.classList.remove('d-none');
