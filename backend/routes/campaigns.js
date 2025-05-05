@@ -3,7 +3,7 @@ const router = express.Router();
 const Campaign = require('../models/campaigns');
 const Customer = require('../models/Customer');
 const CommunicationLog = require('../models/CommunicationLog');
-require('dotenv').config();
+const dotenv = require('dotenv').config();
 const twilio = require('twilio');
 const client = new twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
