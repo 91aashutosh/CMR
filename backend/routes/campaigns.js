@@ -30,12 +30,6 @@ router.post('/', async (req, res) => {
 
     const campaign = await newCampaign.save();
 
-    await client.messages.create({
-      body: message,
-      from: process.env.TWILIO_NUMBER,
-      to: '+917042954671'
-    });
-
     await client.messages
     .create({
       body: message,
