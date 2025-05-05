@@ -33,6 +33,6 @@ app.use('/api/communication-log', CommunicationLogRoutes);
 app.use('/api/audience', audienceRoutes);
 app.use('/api/campaigns', campaignRoutes);
 app.use('/api/segments', segmentRoutes);
-app.use('api/ai/', aiRoutes)
+app.use('/api/ai', aiRoutes);
 
 module.exports = app;
