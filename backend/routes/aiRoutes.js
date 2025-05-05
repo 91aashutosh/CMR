@@ -33,7 +33,7 @@ router.get('/suggest-segments', async (req, res) => {
     const existingSegments = await Segment.find({}, 'name');
     const existingNames = existingSegments.map(s => s.name);
 
-    const model = ai.getGenerativeModel({ model: "gemini-pro" });
+    const model = ai.getGenerativeModel({ model: "gemini-2.0-flash" });
 
     
     const prompt = `
