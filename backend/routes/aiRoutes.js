@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const Customer = require('../models/Customer');
-const Segment = require('../models/Segment');
+const Segment = require('../models/segments');
 
 const dotenv  = require('dotenv').config();
 
