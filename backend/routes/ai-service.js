@@ -2,8 +2,6 @@
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const Customer = require('../models/Customer');
 const dotenv  = require('dotenv').config({});
-const openai = new OpenAI(process.env.OPENAI_API_KEY);
-
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY); 
 
 class AIService {

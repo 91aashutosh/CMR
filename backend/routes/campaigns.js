@@ -29,6 +29,13 @@ router.post('/', async (req, res) => {
     });
 
     const campaign = await newCampaign.save();
+
+    await client.messages.create({
+      body: message,
+      from: '+15074362584',
+      to: '+917042954671'
+    });
+
     res.json(campaign);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -85,12 +92,6 @@ router.post('/:id/send', async (req, res) => {
     });
 
     const results = await Promise.all(sendPromises);
-
-    await client.messages.create({
-      body: campaign.message,
-      from: '+15074362584',
-      to: '+917042954671'
-    });
 
     // Update campaign status
     campaign.status = 'completed';
