@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
+require('dotenv').config(); // Add this at the very top
+
 const Campaign = require('../models/campaigns');
 const Customer = require('../models/Customer');
 const CommunicationLog = require('../models/CommunicationLog');
-const dotenv = require('dotenv').config();
 const twilio = require('twilio');
 const client = new twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 

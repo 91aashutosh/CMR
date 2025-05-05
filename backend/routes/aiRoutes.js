@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
+require('dotenv').config(); // Add this at the very top
+
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const Customer = require('../models/Customer');
 const Segment = require('../models/segments');
-
-const dotenv  = require('dotenv').config();
 const ai = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 
