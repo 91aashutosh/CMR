@@ -5,7 +5,8 @@ require('dotenv').config(); // Add this at the very top
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const Customer = require('../models/Customer');
 const Segment = require('../models/segments');
-const ai = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const GEMINI_API_KEY = 'AIzaSyCdr5OWU-ZaM8zITOr-WIUFO03MkvlX4nk'
+const ai = new GoogleGenerativeAI(GEMINI_API_KEY);
 
 
 router.get('/suggest-segments', async (req, res) => {
