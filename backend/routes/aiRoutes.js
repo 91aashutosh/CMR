@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const GoogleGenAI = require('@google/genai');
+const { GoogleGenerativeAI } = require('@google/generative-ai');
 const Customer = require('../models/Customer');
 const Segment = require('../models/segments');
 
 const dotenv  = require('dotenv').config();
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+const ai = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 
 router.get('/suggest-segments', async (req, res) => {
@@ -32,6 +32,9 @@ router.get('/suggest-segments', async (req, res) => {
     // 2. Get existing segment names to avoid duplicates
     const existingSegments = await Segment.find({}, 'name');
     const existingNames = existingSegments.map(s => s.name);
+
+    const model = ai.getGenerativeModel({ model: "gemini-pro" });
+
     
     const prompt = `
     Analyze these e-commerce customer metrics and suggest 3-5 valuable marketing segments.
@@ -61,7 +64,8 @@ router.get('/suggest-segments', async (req, res) => {
       "offer": "Tailored offer description"
     }]`.trim();
 
-    const result = await await ai.models.generateContent(prompt);
+    const result = await model.generateContent(prompt);
+
     const response = await result.response;
     let text = response.text();
 
