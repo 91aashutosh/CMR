@@ -1,6 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const Campaign = require('../models/campaigns');
+const Customer = require('../models/Customer');
+const CommunicationLog = require('../models/CommunicationLog');
+const dotenv  = require('dotenv').config({});
+const twilio = require('twilio');
+const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
 // Create new campaign
 router.post('/', async (req, res) => {
@@ -54,5 +59,62 @@ router.get('/:id', async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
+
+router.post('/:id/send', async (req, res) => {
+  try {
+    const campaign = await Campaign.findById(req.params.id).populate('segmentId');
+    if (!campaign) {
+      return res.status(404).json({ error: 'Campaign not found' });
+    }
+
+    const customers = await Customer.find(buildSegmentQuery(campaign.segmentId.filter_conditions));
+
+    const sendPromises = customers.map(async customer => {
+      try {
+        const log = new CommunicationLog({
+          customerId: customer._id,
+          campaignId: campaign._id,
+          status: 'sent',
+        });
+        await log.save();
+        return { success: true, customerId: customer._id };
+      } catch (err) {
+        console.error(`Failed to send to ${customer._id}:`, err);
+        return { success: false, customerId: customer._id, error: err.message };
+      }
+    });
+
+    const results = await Promise.all(sendPromises);
+
+    await client.messages.create({
+      body: campaign.message,
+      from: '+15074362584',
+      to: '+917042954671'
+    });
+
+    // Update campaign status
+    campaign.status = 'completed';
+    await campaign.save();
+
+    res.json({
+      success: true,
+      campaign: campaign
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+function buildSegmentQuery(conditions) {
+  const query = {};
+  if (conditions.minSpends) query.totalSpends = { $gte: conditions.minSpends };
+  if (conditions.minVisits) query.visits = { $gte: conditions.minVisits };
+  if (conditions.noVisitMonths) {
+    const date = new Date();
+    date.setMonth(date.getMonth() - conditions.noVisitMonths);
+    query.lastVisitDate = { $lte: date };
+  }
+  return query;
+}
 
 module.exports = router;
