@@ -5,8 +5,6 @@ require('dotenv').config(); // Add this at the very top
 const Campaign = require('../models/campaigns');
 const Customer = require('../models/Customer');
 const CommunicationLog = require('../models/CommunicationLog');
-const twilio = require('twilio');
-const client = new twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
 // Create new campaign
 router.post('/', async (req, res) => {
@@ -30,15 +28,6 @@ router.post('/', async (req, res) => {
     });
 
     const campaign = await newCampaign.save();
-
-    await client.messages
-    .create({
-      body: message,
-      from: process.env.TWILIO_NUMBER,
-      to: '+917042954671'
-    })
-    .then(message => console.log(message.sid))
-    .catch(error => console.error(error));
 
     res.json(campaign);
   } catch (err) {
