@@ -402,6 +402,109 @@ function renderCampaignStats(campaigns) {
             default: return 'bg-light text-dark';
         }
     }
+
+    const aiSuggestBtn = document.getElementById('ai-suggest-btn');
+  if (aiSuggestBtn) {
+    aiSuggestBtn.addEventListener('click', async () => {
+      const spinner = aiSuggestBtn.querySelector('.spinner-border');
+      spinner.classList.remove('d-none');
+      aiSuggestBtn.disabled = true;
+      
+      try {
+        const response = await axios.get('https://cmr-1-p1qb.onrender.com/api/ai/suggest-segments');
+        renderAISuggestions(response.data);
+      } catch (error) {
+        showErrorToast('Failed to get AI suggestions. Please try again later.');
+      } finally {
+        spinner.classList.add('d-none');
+        aiSuggestBtn.disabled = false;
+      }
+    });
+  }
+
+  function renderAISuggestions(suggestions) {
+    const container = document.getElementById('ai-suggestions-container');
+    if (!container || !suggestions.length) return;
+    
+    container.innerHTML = suggestions.map(suggestion => `
+      <div class="col-md-6 mb-4">
+        <div class="card ai-segment-card h-100">
+          <div class="card-header">
+            <h5 class="mb-0">${suggestion.name}</h5>
+          </div>
+          <div class="card-body">
+            <p class="text-muted">${suggestion.description}</p>
+            
+            <div class="mb-3">
+              <h6 class="text-primary">Filters:</h6>
+              <div class="d-flex flex-wrap gap-2">
+                ${suggestion.filters.minSpend ? `
+                  <span class="badge bg-light text-dark">
+                    <i class="bi bi-currency-dollar me-1"></i> Min $${suggestion.filters.minSpend}
+                  </span>
+                ` : ''}
+                
+                ${suggestion.filters.minVisits ? `
+                  <span class="badge bg-light text-dark">
+                    <i class="bi bi-shop me-1"></i> ${suggestion.filters.minVisits}+ visits
+                  </span>
+                ` : ''}
+                
+                ${suggestion.filters.inactivityMonths ? `
+                  <span class="badge bg-light text-dark">
+                    <i class="bi bi-clock-history me-1"></i> Inactive ${suggestion.filters.inactivityMonths}m
+                  </span>
+                ` : ''}
+              </div>
+            </div>
+            
+            <div class="mb-3 p-3 bg-light rounded">
+              <h6 class="text-success">Recommended Offer:</h6>
+              <p class="mb-0">${suggestion.offer}</p>
+            </div>
+            
+            <button class="btn btn-primary w-100 use-suggestion"
+                    data-min-spends="${suggestion.filters.minSpend || ''}"
+                    data-min-visits="${suggestion.filters.minVisits || ''}"
+                    data-inactive-months="${suggestion.filters.inactivityMonths || ''}">
+              <i class="bi bi-check-circle me-2"></i> Apply This Segment
+            </button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+    
+    // Add event listeners to apply suggestions
+    document.querySelectorAll('.use-suggestion').forEach(btn => {
+      btn.addEventListener('click', function() {
+        // Apply filters to segment form
+        document.getElementById('min-spends').value = this.dataset.minSpends || '';
+        document.getElementById('min-visits').value = this.dataset.minVisits || '';
+        document.getElementById('inactive-months').value = this.dataset.inactiveMonths || '';
+        
+        // Show confirmation
+        showSuccessToast(`"${this.closest('.card').querySelector('h5').textContent}" filters applied!`);
+      });
+    });
+  }
+  
+  function showSuccessToast(message) {
+    // Implement toast notification
+    const toast = document.createElement('div');
+    toast.className = 'position-fixed bottom-0 end-0 p-3';
+    toast.innerHTML = `
+      <div class="toast show" role="alert">
+        <div class="toast-header bg-success text-white">
+          <strong class="me-auto">Success</strong>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+        </div>
+        <div class="toast-body">${message}</div>
+      </div>
+    `;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+  }
+
 });
 
 // Make loadCampaigns available globally for retry button
