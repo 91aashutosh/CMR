@@ -1,13 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+const GoogleGenAI = require('@google/genai');
 const Customer = require('../models/Customer');
 const Segment = require('../models/segments');
 
 const dotenv  = require('dotenv').config();
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
-// Initialize Gemini - Get your free API key from: https://ai.google.dev/
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY); 
 
 router.get('/suggest-segments', async (req, res) => {
   try {
@@ -33,9 +32,6 @@ router.get('/suggest-segments', async (req, res) => {
     // 2. Get existing segment names to avoid duplicates
     const existingSegments = await Segment.find({}, 'name');
     const existingNames = existingSegments.map(s => s.name);
-
-    // 3. Generate AI suggestions
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
     
     const prompt = `
     Analyze these e-commerce customer metrics and suggest 3-5 valuable marketing segments.
@@ -65,7 +61,7 @@ router.get('/suggest-segments', async (req, res) => {
       "offer": "Tailored offer description"
     }]`.trim();
 
-    const result = await model.generateContent(prompt);
+    const result = await await ai.models.generateContent(prompt);
     const response = await result.response;
     let text = response.text();
 
