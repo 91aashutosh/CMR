@@ -3,9 +3,9 @@ const router = express.Router();
 const Campaign = require('../models/campaigns');
 const Customer = require('../models/Customer');
 const CommunicationLog = require('../models/CommunicationLog');
-const dotenv  = require('dotenv').config({});
+require('dotenv').config();
 const twilio = require('twilio');
-const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+const client = new twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
 // Create new campaign
 router.post('/', async (req, res) => {
@@ -35,6 +35,15 @@ router.post('/', async (req, res) => {
       from: process.env.TWILIO_NUMBER,
       to: '+917042954671'
     });
+
+    await client.messages
+    .create({
+      body: message,
+      from: process.env.TWILIO_NUMBER,
+      to: '+917042954671'
+    })
+    .then(message => console.log(message.sid))
+    .catch(error => console.error(error));
 
     res.json(campaign);
   } catch (err) {
