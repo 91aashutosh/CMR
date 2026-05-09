@@ -10,12 +10,37 @@ const CommunicationLogSchema = new Schema({
   campaignId: {
     type: Schema.Types.ObjectId,
     ref: 'Campaign',
-    required: true,
+  },
+  journeyId: {
+    type: Schema.Types.ObjectId,
+    ref: 'Journey',
   },
   status: {
     type: String,
-    enum: ['SENT', 'FAILED'],
+    enum: ['PENDING', 'SENT', 'DELIVERED', 'FAILED', 'RETRIED'],
     default: 'SENT',
+  },
+  channel: {
+    type: String,
+    enum: ['email', 'sms', 'push', 'whatsapp'],
+    default: 'email',
+  },
+  failureReason: {
+    type: String,
+    default: '',
+  },
+  retryCount: {
+    type: Number,
+    default: 0,
+  },
+  lastAttemptAt: {
+    type: Date,
+    default: Date.now,
+  },
+  deliveredAt: Date,
+  metadata: {
+    type: Schema.Types.Mixed,
+    default: {},
   },
   createdAt: {
     type: Date,

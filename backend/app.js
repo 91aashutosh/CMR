@@ -11,6 +11,7 @@ const campaignRoutes = require('./routes/campaigns');
 const CommunicationLogRoutes = require('./routes/communicationLog')
 const segmentRoutes = require('./routes/segments');
 const aiRoutes = require('./routes/aiRoutes')
+const journeyRoutes = require('./routes/journeys');
 const cors = require('cors');
 const dotenv = require('dotenv').config();
 
@@ -34,5 +35,6 @@ app.use('/api/audience', audienceRoutes);
 app.use('/api/campaigns', campaignRoutes);
 app.use('/api/segments', segmentRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/journeys', journeyRoutes);
 
 module.exports = app;

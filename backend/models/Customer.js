@@ -14,6 +14,9 @@ const CustomerSchema = new Schema({
     type: String,
     required: true,
   },
+  birthDate: {
+    type: Date,
+  },
   visits: {
     type: Number,
     default: 0,

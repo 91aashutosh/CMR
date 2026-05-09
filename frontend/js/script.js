@@ -46,7 +46,7 @@ function loadSegments() {
     `;
 
     // Load segments from API
-    axios.get('https://cmr-1-p1qb.onrender.com/api/segments')
+    axios.get(apiUrl('segments'))
         .then(function(response) {
             if (response.data && Array.isArray(response.data)) {
                 renderSegmentList(response.data);
@@ -88,7 +88,7 @@ function handleSegmentSubmit() {
         Saving...
     `;
 
-    axios.post('https://cmr-1-p1qb.onrender.com/api/segments', segmentData)
+    axios.post(apiUrl('segments'), segmentData)
         .then(function(response) {
             if (response.data && response.data._id) {
                 // Success - reload segments and reset form
@@ -155,7 +155,7 @@ function renderSegmentList(segments) {
 }
 
 function showSegmentDetails(segmentId) {
-    axios.get(`https://cmr-1-p1qb.onrender.com/api/segments/${segmentId}`)
+    axios.get(apiUrl(`segments/${segmentId}`))
         .then(function(response) {
             const segment = response.data;
             // Show in modal or alert
